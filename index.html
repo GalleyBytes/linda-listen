@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Linda Listen</title>
+    <link rel="stylesheet" href="/src/styles.css" />
+    <script type="module" src="/src/main.ts" defer></script>
+  </head>
+  <body>
+    <main class="shell">
+      <section class="hero panel">
+        <div class="hero-brand">
+          <img id="brand-mark" class="brand-mark" alt="" aria-hidden="true" />
+          <div>
+            <p class="eyebrow">macOS dictation app</p>
+            <h1>Linda Listen</h1>
+            <p class="lede">Hold the hotkey, record local speech, and paste the transcript at the cursor.</p>
+          </div>
+        </div>
+        <div class="hero-meta">
+          <span id="status-pill" class="status-pill status-pill--idle">Idle</span>
+          <p id="status-detail" class="status-detail">Ready to record.</p>
+          <p class="mono" id="status-shortcut">Hotkey: —</p>
+          <p class="mono" id="config-path">Config: —</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Capture</h2>
+            <p>Use the global shortcut or the controls below to test the local dictation pipeline.</p>
+          </div>
+          <div class="button-row">
+            <button id="start-capture" type="button">Start capture</button>
+            <button id="stop-capture" type="button" class="secondary">Stop and process</button>
+          </div>
+        </div>
+
+        <label class="field">
+          <span>Manual transcript</span>
+          <textarea
+            id="manual-input"
+            rows="7"
+            placeholder="Paste raw transcript here to test clipboard/paste behavior without using the microphone."
+          ></textarea>
+        </label>
+
+        <div class="button-row">
+          <button id="process-text" type="button">Process manual text</button>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Settings</h2>
+            <p>Speech model assets download automatically into Application Support. Leave the model directory blank to use the app-managed cache.</p>
+          </div>
+          <p id="api-key-state" class="badge">Speech model assets download automatically into app storage.</p>
+        </div>
+
+        <form id="settings-form" class="settings-grid">
+          <label class="field field--toggle">
+            <input id="gemini-enabled" type="checkbox" />
+            <span>Enable optional Gemini cleanup after transcription</span>
+          </label>
+
+          <label class="field">
+            <span>Gemini API key (optional)</span>
+            <input
+              id="api-key"
+              type="password"
+              placeholder="Stored in Keychain after save"
+              autocomplete="off"
+            />
+          </label>
+
+          <label class="field">
+            <span>Gemini model</span>
+            <input id="gemini-model" type="text" />
+          </label>
+
+          <label class="field field--full">
+            <span>Gemini prompt</span>
+            <textarea id="gemini-prompt" rows="6"></textarea>
+          </label>
+
+          <label class="field">
+            <span>Speech model directory (optional override)</span>
+            <input id="whisper-model-path" type="text" placeholder="Leave blank to use the app-managed cache" />
+          </label>
+
+          <label class="field">
+            <span>Language hint (optional)</span>
+            <input id="whisper-language" type="text" placeholder="Leave blank to auto-detect" />
+          </label>
+
+          <label class="field">
+            <span>Global hotkey</span>
+            <input id="shortcut" type="text" placeholder="Option+Space" />
+            <small class="field-note">CommandOrControl works on macOS, and F18 is also bound as a fallback.</small>
+          </label>
+
+          <label class="field field--toggle">
+            <input id="auto-paste" type="checkbox" />
+            <span>Automatically paste after copying</span>
+            <small class="field-note">If the app window is focused, the transcript is copied but paste is skipped.</small>
+          </label>
+
+          <div class="button-row field--full">
+            <button id="save-settings" type="submit">Save settings</button>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>History</h2>
+            <p>The last five transcripts are kept alongside their audio recordings.</p>
+          </div>
+          <div class="button-row">
+            <button id="open-history" type="button" class="secondary">Open folder</button>
+          </div>
+        </div>
+        <div id="history-list" class="history-list">
+          <p class="muted">No history yet.</p>
+        </div>
+      </section>
+
+      <section class="panel">
+        <div class="panel-head">
+          <div>
+            <h2>Latest run</h2>
+            <p>These values update whenever the shortcut or buttons finish a run.</p>
+          </div>
+        </div>
+
+        <div class="result-grid">
+          <article class="result-card">
+            <h3>Transcript</h3>
+            <pre id="last-transcript" class="mono"></pre>
+          </article>
+          <article class="result-card">
+            <h3>Final text</h3>
+            <pre id="last-output" class="mono"></pre>
+          </article>
+        </div>
+
+        <article class="result-card error-card">
+          <h3>Last error</h3>
+          <pre id="last-error" class="mono"></pre>
+        </article>
+      </section>
+    </main>
+  </body>
+</html>
